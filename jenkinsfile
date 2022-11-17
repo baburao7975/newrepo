@@ -8,7 +8,7 @@ pipeline{
            stage('gitclone'){
 	    
                steps{
-                 git 'https://github.com/baburao7975/pipelinecode.git'
+                 git 'https://github.com/baburao7975/DevOpsAddressBook.git'
               }
           }
           stage('Compile'){
@@ -32,6 +32,17 @@ pipeline{
               steps{
 		  
                   sh 'mvn package'
+              }
+          }
+              stage('deploy'){
+		  
+              steps{
+		  sshagent(['tomcatid']) {
+		      
+            sh "scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/pipelinecode/target/addressbook.war ubuntu@54.165.80.123:/opt/tomcat/webapps"
+
+                 }
+                  
               }
           }
 	     
